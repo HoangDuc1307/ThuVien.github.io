@@ -1,0 +1,131 @@
+services:
+  db:
+    image: postgres:15
+    container_name: library_db
+    environment:
+      POSTGRES_PASSWORD: "1"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - library_network
+    restart: always
+
+  user-service:
+    build:
+      context: ./be-library
+      dockerfile: user-service/Dockerfile
+    container_name: user_service
+    environment:
+      - DATABASE_NAME=user
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=1
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,user-service,api-gateway,nginx
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./be-library/user-service:/app
+      - ../requirements.txt:/requirements.txt
+    networks:
+      - library_network
+    restart: always
+
+  book-service:
+    build:
+      context: ./be-library
+      dockerfile: book-service/Dockerfile
+    container_name: book_service
+    environment:
+      - DATABASE_NAME=book
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=1
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,book-service,api-gateway,nginx
+    depends_on:
+      - db
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./be-library/book-service:/app
+      - ../requirements.txt:/requirements.txt
+    networks:
+      - library_network
+    restart: always
+
+  api-gateway:
+    build:
+      context: ./be-library/api-gateway
+      dockerfile: Dockerfile
+    container_name: api_gateway
+    environment:
+      - NODE_ENV=development
+      - PORT=8002
+      - USER_SERVICE_URL=http://user-service:8000
+      - BOOK_SERVICE_URL=http://book-service:8001
+      - ALLOWED_ORIGINS=*
+    depends_on:
+      - user-service
+      - book-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./be-library/api-gateway:/app
+      - /app/node_modules
+    networks:
+      - library_network
+    restart: always
+
+  frontend:
+    build:
+      context: ./fe-library/fe
+      dockerfile: Dockerfile
+    container_name: library_frontend
+    depends_on:
+      - api-gateway
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./fe-library/fe:/app
+      - /app/node_modules
+      - /app/.angular
+    networks:
+      - library_network
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: library_nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - api-gateway
+    ports:
+      - "80:80"
+    networks:
+      - library_network
+    restart: always
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: library_tunnel
+    command: tunnel --url http://nginx:80
+    depends_on:
+      - nginx
+    networks:
+      - library_network
+    restart: always
+
+networks:
+  library_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

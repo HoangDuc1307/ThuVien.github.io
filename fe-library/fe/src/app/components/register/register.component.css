@@ -1,0 +1,100 @@
+.auth-wrapper {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.auth-left {
+  background:
+    linear-gradient(rgba(22, 163, 74, 0.6), rgba(22, 163, 74, 0.6)),
+    url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.auth-left h1 {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.auth-left p {
+  opacity: 0.9;
+  max-width: 380px;
+  line-height: 1.6;
+}
+
+.auth-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f8fb;
+}
+
+.auth-box {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+}
+
+.auth-box h2 {
+  margin-bottom: 8px;
+}
+
+.auth-box .muted {
+  color: #6b7280;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #e6e9ef;
+}
+
+.auth-box button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #16a34a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-box button:hover {
+  background: #15803d;
+}
+
+.auth-box .switch {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.auth-box .switch a {
+  color: #16a34a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .auth-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .auth-left {
+    display: none;
+  }
+}
+

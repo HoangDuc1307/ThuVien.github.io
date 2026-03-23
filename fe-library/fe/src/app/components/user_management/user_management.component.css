@@ -1,0 +1,22 @@
+.bg-white\/90 {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+td {
+  font-size: 14px;
+}
+
+tbody tr:hover {
+  transition: background 0.15s ease;
+}
+

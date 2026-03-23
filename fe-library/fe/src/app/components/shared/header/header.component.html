@@ -1,0 +1,47 @@
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <a routerLink="/" class="logo">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">ThưViện</span>
+      </a>
+
+      <nav class="nav">
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Trang chủ</a
+        >
+        <a routerLink="/books" routerLinkActive="active">Sách</a>
+
+        <ng-container
+          *ngIf="authService.currentUser$ | async as user; else guestLinks"
+        >
+          <a
+            routerLink="/user-management"
+            routerLinkActive="active"
+           
+            >Quản lý</a
+          >
+          <div class="user-menu">
+            <span class="username">👤 {{ user.username }}</span>
+            <button (click)="logout()" class="btn-logout">Đăng xuất</button>
+          </div>
+        </ng-container>
+
+        <ng-template #guestLinks>
+          <a routerLink="/login" routerLinkActive="active" class="btn-login"
+            >Đăng nhập</a
+          >
+          <a
+            routerLink="/register"
+            routerLinkActive="active"
+            class="btn-register"
+            >Đăng ký</a
+          >
+        </ng-template>
+      </nav>
+    </div>
+  </div>
+</header>

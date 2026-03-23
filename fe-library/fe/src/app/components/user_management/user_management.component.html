@@ -1,0 +1,63 @@
+<div class="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+  <app-header></app-header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-md overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center gap-2">
+        <span class="text-lg font-semibold text-slate-800">Đã mượn</span>
+        <span class="text-sm text-slate-500">({{ myBorrows.length }} bản ghi)</span>
+        <span *ngIf="loading" class="text-xs text-indigo-600 ml-auto">Đang tải...</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
+            <tr>
+              <th class="px-4 py-3 text-left">Sách</th>
+              <th class="px-4 py-3 text-left">Thành viên</th>
+              <th class="px-4 py-3 text-left">Ngày mượn</th>
+              <th class="px-4 py-3 text-left">Ngày trả</th>
+              <th class="px-4 py-3 text-left">Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100" *ngIf="myBorrows.length; else emptyState">
+            <tr *ngFor="let record of myBorrows" class="hover:bg-slate-50/80">
+              <td class="px-4 py-3 font-medium text-slate-900">
+                {{ record.book_title }}
+              </td>
+              <td class="px-4 py-3 text-slate-600">
+                {{ record.borrower_name || ("User ID: " + record.user_id) }}
+              </td>
+              <td class="px-4 py-3 text-slate-600">
+                {{ record.borrow_date | date : "short" }}
+              </td>
+              <td class="px-4 py-3 text-slate-600">
+                {{ record.due_date | date : "short" }}
+              </td>
+              <td class="px-4 py-3">
+                <span
+                  class="px-3 py-1 rounded-full text-xs font-semibold"
+                  [class.bg-amber-100]="record.status === 'BORROWED'"
+                  [class.text-amber-700]="record.status === 'BORROWED'"
+                  [class.bg-rose-100]="record.status === 'OVERDUE'"
+                  [class.text-rose-700]="record.status === 'OVERDUE'"
+                  [class.bg-emerald-100]="record.status === 'RETURNED'"
+                  [class.text-emerald-700]="record.status === 'RETURNED'"
+                >
+                  {{ record.status === "OVERDUE" ? "⚠️" : record.status === "RETURNED" ? "✅" : "📖" }}
+                  {{ record.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #emptyState>
+          <div class="p-8 text-center text-slate-500">
+            Bạn chưa có bản ghi mượn nào.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </main>
+</div>
+

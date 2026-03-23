@@ -1,0 +1,38 @@
+<div class="auth-wrapper">
+  <div class="auth-left">
+    <div>
+      <h1>Gia nhập ThưViện</h1>
+      <p>
+        Tạo tài khoản để mượn sách, theo dõi lịch sử đọc
+        và xây dựng thói quen học tập mỗi ngày.
+      </p>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-box">
+      <h2>Đăng ký</h2>
+      <p class="muted">Tạo tài khoản mới</p>
+
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="success">{{ success }}</div>
+
+      <form (ngSubmit)="onSubmit()">
+        <input type="text" placeholder="Tên đăng nhập" [(ngModel)]="username" name="username" required>
+        <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required>
+        <input type="password" placeholder="Mật khẩu" [(ngModel)]="password" name="password" required>
+        <input type="password" placeholder="Nhập lại mật khẩu" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+        <button type="submit" [disabled]="loading">
+          <span *ngIf="loading">Đang tạo tài khoản...</span>
+          <span *ngIf="!loading">Đăng ký</span>
+        </button>
+      </form>
+
+      <div class="switch">
+        Đã có tài khoản?
+        <a routerLink="/login">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+</div>
+

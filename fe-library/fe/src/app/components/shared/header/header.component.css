@@ -1,0 +1,194 @@
+/* src/app/components/shared/header/header.component.css */
+
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e6e9ef;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2563eb;
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.logo-text {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #6b7280;
+  font-weight: 500;
+  transition: all 0.2s;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.nav a:hover {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.nav a.active {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+/* User Menu */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.username {
+  color: #111827;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Logout Button */
+.btn-logout {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.btn-logout:active {
+  transform: translateY(0);
+}
+
+/* Guest Links */
+.btn-login {
+  padding: 8px 16px;
+  border: 1px solid #2563eb !important;
+  color: #2563eb !important;
+  border-radius: 8px;
+  background: transparent !important;
+  transition: all 0.2s;
+}
+
+.btn-login:hover {
+  background: #eff6ff !important;
+  border-color: #1e40af !important;
+  color: #1e40af !important;
+}
+
+.btn-register {
+  padding: 8px 16px;
+  background: #2563eb !important;
+  color: white !important;
+  border-radius: 8px;
+  border: 1px solid #2563eb;
+  transition: all 0.2s;
+}
+
+.btn-register:hover {
+  background: #1e40af !important;
+  border-color: #1e40af;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.btn-register:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-content {
+    height: 60px;
+  }
+
+  .nav {
+    gap: 12px;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+  }
+
+  .username {
+    display: none;
+  }
+
+  .user-menu {
+    padding: 6px;
+  }
+
+  .btn-logout,
+  .btn-login,
+  .btn-register {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav a {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .nav {
+    gap: 8px;
+  }
+}

@@ -1,0 +1,78 @@
+<app-header></app-header>
+
+<main class="container section">
+  <div class="section-header">
+    <h2>Tất cả sách trong thư viện</h2>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Tìm theo tên sách, tác giả, thể loại..."
+    [(ngModel)]="searchQuery"
+    (input)="onSearch()"
+  />
+
+  <div class="book-grid">
+    <article class="card" *ngFor="let book of filteredBooks">
+      <img class="card-img" [src]="book.image" [alt]="book.title" />
+      <div class="card-body">
+        <div>
+          <h3 class="card-title">{{ book.title }}</h3>
+          <p class="card-sub">{{ book.author }} • ISBN: {{ book.isbn }}</p>
+        </div>
+        <div class="card-meta">
+          <span
+            >Available: {{ book.available_quantity }}/{{
+              book.total_quantity
+            }}</span
+          >
+          <!-- ✅ CHANGED: Navigate to management page -->
+          <button
+            class="card-btn"
+            (click)="borrowBook(book.id)"
+          >
+            {{ book.available_quantity > 0 ? "Đặt sách " : "Hết sách" }}
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<!-- Borrow Modal -->
+<div
+  class="modal-backdrop"
+  *ngIf="showBorrowModal && selectedBook"
+  (click)="closeModal()"
+>
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Mượn sách</h3>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Tên người mượn *</label>
+        <input type="text" [(ngModel)]="borrowerName" disabled />
+      </div>
+      <div class="field">
+        <label>Sách *</label>
+        <input type="text" [value]="selectedBook?.title" disabled />
+      </div>
+      <div class="field">
+        <label>Chọn ngày trả sách *</label>
+        <input
+          type="datetime-local"
+          [(ngModel)]="dueDate"
+          [min]="getDefaultDueDate()"
+        />
+        <small>Chọn ngày và giờ trả sách (mặc định: 1 ngày từ hôm nay)</small>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Hủy</button>
+      <button class="btn-primary" (click)="confirmBorrow()">📕 Mượn sách</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,882 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50"
+>
+  <!-- Header -->
+  <header
+    class="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 shadow-lg"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-center gap-3">
+        <div class="bg-white/20 backdrop-blur-sm p-3 rounded-2xl">
+          <span class="text-white text-3xl">📚</span>
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-white">Quản lý mượn/trả</h1>
+          <p class="text-white/90 mt-1">Thủ thư</p>
+        </div>
+        <div class="ml-auto">
+          <button
+            (click)="logout()"
+            class="flex items-center gap-2 px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition-all duration-300 shadow-2xl hover:shadow-2xl hover:scale-105 border-4 border-blue-600"
+          >
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav
+    class="bg-white/80 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex gap-2">
+        <button
+          (click)="switchPage('books')"
+          [class.active]="activePage === 'books'"
+          class="nav-btn flex items-center gap-2 px-6 py-4 transition-all duration-300 relative group"
+        >
+          <span>Quản lý sách</span>
+        </button>
+        <button
+          (click)="switchPage('loans')"
+          [class.active]="activePage === 'loans'"
+          class="nav-btn flex items-center gap-2 px-6 py-4 transition-all duration-300 relative group text-gray-600 hover:text-gray-900"
+        >
+          <span>Mượn/Trả sách</span>
+        </button>
+        <button
+        (click)="switchPage('members')"
+        [class.active]="activePage === 'members'"
+        class="nav-btn flex items-center gap-2 px-6 py-4 transition-all duration-300 relative group text-gray-600 hover:text-gray-900"
+      >
+        <span>Quản lý thành viên</span>
+      </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Books Page -->
+    <div *ngIf="activePage === 'books'" class="page-content">
+      <div class="flex items-center justify-between mb-6">
+        <h2
+          class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600"
+        >
+          Quản lý sách
+        </h2>
+        <div class="flex gap-3">
+          <button
+            (click)="openBookReport()"
+            class="flex items-center gap-2 px-5 py-2.5 bg-black hover:bg-gray-900 text-white font-bold rounded-xl transition-all duration-300 shadow-2xl hover:shadow-2xl hover:scale-105 border-4 border-gray-800"
+          >
+            📊 Báo cáo chung
+          </button>
+          <button
+            (click)="openBookModal()"
+            class="flex items-center gap-2 px-5 py-2.5 bg-red-700 hover:bg-red-800 text-white font-bold rounded-xl transition-all duration-300 shadow-2xl hover:shadow-2xl hover:scale-105 border-4 border-red-600"
+          >
+            ➕ Thêm sách
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-purple-100"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead
+              class="bg-gradient-to-r from-purple-100 to-pink-100 border-b border-purple-200"
+            >
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Hình ảnh
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Title
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Author
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  ISBN
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Total Quantity
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Available
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let book of books" class="hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <img
+                    *ngIf="book.image_url || book.image"
+                    [src]="book.image_url || book.image"
+                    [alt]="book.title"
+                    class="w-16 h-20 object-cover rounded-lg border-2 border-purple-200"
+                    onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23ddd\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23999\'%3E📚%3C/text%3E%3C/svg%3E'"
+                  />
+                  <div
+                    *ngIf="!book.image_url && !book.image"
+                    class="w-16 h-20 bg-gray-200 rounded-lg flex items-center justify-center text-2xl"
+                  >
+                    📚
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                  {{ book.title }}
+                </td>
+                <td class="px-6 py-4 text-gray-600">{{ book.author }}</td>
+                <td class="px-6 py-4 text-gray-600 text-sm">{{ book.isbn }}</td>
+                <td class="px-6 py-4 text-gray-600">
+                  {{ book.total_quantity }}
+                </td>
+                <td class="px-6 py-4">
+                  <span
+                    class="px-3 py-1 rounded-full text-xs"
+                    [class.bg-gradient-to-r]="true"
+                    [class.from-green-100]="book.available_quantity > 0"
+                    [class.to-emerald-100]="book.available_quantity > 0"
+                    [class.text-green-700]="book.available_quantity > 0"
+                    [class.from-red-100]="book.available_quantity === 0"
+                    [class.to-rose-100]="book.available_quantity === 0"
+                    [class.text-red-700]="book.available_quantity === 0"
+                  >
+                    {{ book.available_quantity }}
+                  </span>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <button
+                      (click)="editBook(book)"
+                      class="p-2 text-blue-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-lg transition-all duration-300 hover:scale-110"
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      (click)="deleteBook(book.id)"
+                      class="p-2 text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 rounded-lg transition-all duration-300 hover:scale-110"
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Members Page -->
+    <div *ngIf="activePage === 'members'" class="page-content">
+      <div class="flex items-center justify-between mb-6">
+        <h2
+          class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600"
+        >
+          Quản lý thành viên
+        </h2>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-purple-100"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead
+              class="bg-gradient-to-r from-purple-100 to-pink-100 border-b border-purple-200"
+            >
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  ID
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Tên
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Email
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" *ngIf="members?.length; else emptyMembers">
+              <tr *ngFor="let member of members" class="hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium text-gray-900">
+                  {{ member.id }}
+                </td>
+                <td class="px-6 py-4 text-gray-600">{{ member.name }}</td>
+                <td class="px-6 py-4 text-gray-600">{{ member.email }}</td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <button
+                      (click)="editMember(member)"
+                      class="p-2 text-blue-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-lg transition-all duration-300 hover:scale-110"
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      (click)="deleteMember(member.id)"
+                      class="p-2 text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 rounded-lg transition-all duration-300 hover:scale-110"
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #emptyMembers>
+            <div class="p-6 text-center text-gray-500">
+              Chưa có thành viên nào.
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loans Page -->
+    <div *ngIf="activePage === 'loans'" class="page-content">
+      <h2
+        class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-rose-600 mb-6"
+      >
+        Quản lý mượn/trả
+      </h2>
+
+      <div
+        class="bg-white/80 backdrop-blur-sm rounded-t-2xl border-b border-orange-200"
+      >
+        <div class="flex">
+          <button
+            (click)="switchLoanTab('loan')"
+            [class.border-orange-500]="activeLoanTab === 'loan'"
+            class="loan-tab-btn px-6 py-4 border-b-4 transition-all duration-300"
+            [class.bg-gradient-to-t]="activeLoanTab === 'loan'"
+            [class.from-orange-50]="activeLoanTab === 'loan'"
+            [class.to-transparent]="activeLoanTab === 'loan'"
+            [class.text-orange-600]="activeLoanTab === 'loan'"
+            [class.border-transparent]="activeLoanTab !== 'loan'"
+            [class.text-gray-600]="activeLoanTab !== 'loan'"
+          >
+            Mượn sách
+          </button>
+          <button
+            (click)="switchLoanTab('return')"
+            [class.border-orange-500]="activeLoanTab === 'return'"
+            class="loan-tab-btn px-6 py-4 border-b-4 transition-all duration-300"
+            [class.bg-gradient-to-t]="activeLoanTab === 'return'"
+            [class.from-orange-50]="activeLoanTab === 'return'"
+            [class.to-transparent]="activeLoanTab === 'return'"
+            [class.text-orange-600]="activeLoanTab === 'return'"
+            [class.border-transparent]="activeLoanTab !== 'return'"
+            [class.text-gray-600]="activeLoanTab !== 'return'"
+          >
+            Trả sách
+          </button>
+          <button
+            (click)="switchLoanTab('report')"
+            [class.border-orange-500]="activeLoanTab === 'report'"
+            class="loan-tab-btn px-6 py-4 border-b-4 transition-all duration-300"
+            [class.bg-gradient-to-t]="activeLoanTab === 'report'"
+            [class.from-orange-50]="activeLoanTab === 'report'"
+            [class.to-transparent]="activeLoanTab === 'report'"
+            [class.text-orange-600]="activeLoanTab === 'report'"
+            [class.border-transparent]="activeLoanTab !== 'report'"
+            [class.text-gray-600]="activeLoanTab !== 'report'"
+          >
+            Báo cáo
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-sm rounded-b-2xl shadow-xl p-6 border-l border-r border-b border-orange-100"
+      >
+        <!-- Loan Tab -->
+        <div *ngIf="activeLoanTab === 'loan'" class="loan-content">
+          <h3
+            class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-rose-600 mb-4"
+          >
+            Mượn sách
+          </h3>
+
+          <div class="max-w-2xl mb-8">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Chọn thành viên</label
+                >
+                <select
+                  [(ngModel)]="selectedMemberId"
+                  name="selectedMemberId"
+                  (ngModelChange)="onMemberSelect($event)"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                >
+                  <option [ngValue]="null">-- Không chọn --</option>
+                  <option *ngFor="let member of members" [ngValue]="member.id">
+                    {{ member.name }} ({{ member.email || 'No email' }})
+                  </option>
+                </select>
+                
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Chọn sách mượn *</label
+                >
+                <select
+                  [(ngModel)]="selectedBookId"
+                  name="selectedBookId"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                >
+                  <option [value]="0">Choose a book...</option>
+                  <option
+                    *ngFor="let book of getAvailableBooks()"
+                    [value]="book.id"
+                  >
+                    {{ book.title }} by {{ book.author }} (Available:
+                    {{ book.available_quantity }})
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Chọn ngày trả sách *</label
+                >
+                <input
+                  type="datetime-local"
+                  [(ngModel)]="selectedDueDate"
+                  name="selectedDueDate"
+                  [min]="getMinDate()"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  Chọn ngày và giờ trả sách (mặc định: 1 ngày từ hôm nay)
+                </p>
+              </div>
+              <button
+                (click)="borrowBook(selectedBookId)"
+                [disabled]="
+                  !selectedMemberId ||
+                  !selectedBookId ||
+                  selectedBookId === 0 ||
+                  !selectedDueDate ||
+                  loading
+                "
+                class="flex items-center gap-2 px-6 py-3 bg-indigo-800 hover:bg-indigo-900 text-white font-bold rounded-xl transition-all duration-300 shadow-2xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed border-4 border-indigo-700"
+              >
+                <span *ngIf="loading">Đang xử lý...</span>
+                <span *ngIf="!loading">📖 Mượn sách</span>
+              </button>
+            </div>
+          </div>
+
+          <h4 class="text-xl font-bold text-gray-900 mb-4">Đã mượn</h4>
+          <div
+            class="border-2 border-orange-200 rounded-2xl overflow-hidden bg-white/50 backdrop-blur-sm"
+          >
+            <table class="w-full">
+              <thead class="bg-gradient-to-r from-orange-100 to-rose-100">
+                <tr>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Sách
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Thành viên
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Ngày mượn
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Ngày trả
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Thao tác
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr *ngFor="let record of getActiveBorrows()">
+                  <td class="px-4 py-3 font-medium text-gray-900">
+                    {{ record.book_title }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">
+                    {{ record.borrower_name || "User ID: " + record.user_id }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">
+                    {{ record.borrow_date | date : "short" }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">
+                    {{ record.due_date | date : "short" }}
+                  </td>
+                  <td class="px-4 py-3">
+                    <span
+                      class="px-3 py-1 rounded-full text-xs"
+                      [class.bg-gradient-to-r]="true"
+                      [class.from-red-100]="record.status === 'OVERDUE'"
+                      [class.to-rose-100]="record.status === 'OVERDUE'"
+                      [class.text-red-700]="record.status === 'OVERDUE'"
+                      [class.from-yellow-100]="record.status === 'BORROWED'"
+                      [class.to-amber-100]="record.status === 'BORROWED'"
+                      [class.text-yellow-700]="record.status === 'BORROWED'"
+                    >
+                      {{ record.status === "OVERDUE" ? "⚠️" : "📖" }}
+                      {{ record.status }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <button
+                      *ngIf="record.status === 'PENDING'"
+                      (click)="approveBorrow(record.id)"
+                      class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold"
+                    >
+                      Duyệt
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Return Tab -->
+        <div *ngIf="activeLoanTab === 'return'" class="loan-content">
+          <h3
+            class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 mb-4"
+          >
+            Trả sách
+          </h3>
+
+          <div class="max-w-2xl mb-8">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Chọn sách trả *</label
+                >
+                <select
+                  [(ngModel)]="returnForm.bookId"
+                  name="bookId"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option [value]="0">Choose a book to return...</option>
+                  <option
+                    *ngFor="let record of getActiveBorrows()"
+                    [value]="record.id"
+                  >
+                    {{ record.book_title }} -
+                    {{ record.borrower_name || "User ID: " + record.user_id }}
+                    (Due: {{ record.due_date | date : "short" }}){{
+                      record.status === "OVERDUE" ? " - OVERDUE" : ""
+                    }}
+                  </option>
+                </select>
+              </div>
+              <button
+                (click)="returnBook(returnForm.bookId)"
+                [disabled]="
+                  !returnForm.bookId || returnForm.bookId === 0 || loading
+                "
+                class="flex items-center gap-2 px-6 py-3 bg-amber-700 hover:bg-amber-800 text-white font-bold rounded-xl transition-all duration-300 shadow-2xl hover:shadow-2xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed border-4 border-amber-600"
+              >
+                <span *ngIf="loading">Đang xử lý...</span>
+                <span *ngIf="!loading">✅ Trả sách</span>
+              </button>
+            </div>
+          </div>
+
+          <h4 class="text-xl font-bold text-gray-900 mb-4">Sách mượn</h4>
+          <div
+            class="border-2 border-green-200 rounded-2xl overflow-hidden bg-white/50 backdrop-blur-sm"
+          >
+            <table class="w-full">
+              <thead class="bg-gradient-to-r from-green-100 to-emerald-100">
+                <tr>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Sách
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Thành viên
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Ngày mượn
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Ngày trả
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-4 py-3 text-left text-xs text-gray-500 uppercase"
+                  >
+                    Thao tác
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr *ngFor="let record of getActiveBorrows()">
+                  <td class="px-4 py-3 font-medium text-gray-900">
+                    {{ record.book_title }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">
+                    {{ record.borrower_name || "User ID: " + record.user_id }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">
+                    {{ record.borrow_date | date : "short" }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">
+                    {{ record.due_date | date : "short" }}
+                  </td>
+                  <td class="px-4 py-3">
+                    <span
+                      class="px-3 py-1 rounded-full text-xs"
+                      [class.bg-gradient-to-r]="true"
+                      [class.from-red-100]="record.status === 'OVERDUE'"
+                      [class.to-rose-100]="record.status === 'OVERDUE'"
+                      [class.text-red-700]="record.status === 'OVERDUE'"
+                      [class.from-yellow-100]="record.status === 'BORROWED'"
+                      [class.to-amber-100]="record.status === 'BORROWED'"
+                      [class.text-yellow-700]="record.status === 'BORROWED'"
+                    >
+                      {{ record.status === "OVERDUE" ? "⚠️" : "📖" }}
+                      {{ record.status }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <button
+                      *ngIf="record.status === 'PENDING'"
+                      (click)="approveBorrow(record.id)"
+                      class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold"
+                    >
+                      Duyệt
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Report Tab -->
+        <div *ngIf="activeLoanTab === 'report'" class="loan-content">
+          <div class="flex items-center justify-between mb-6">
+            <h3
+              class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600"
+            >
+              Báo cáo mượn/trả
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4 mb-6">
+            <div
+              class="bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl p-4 shadow-lg border-2 border-blue-200"
+            >
+              <p class="text-sm text-blue-700 mb-1">📚 Total Loans</p>
+              <p class="text-3xl font-bold text-blue-900">
+                {{ borrowHistory.length }}
+              </p>
+            </div>
+            <div
+              class="bg-gradient-to-br from-yellow-100 to-amber-100 rounded-2xl p-4 shadow-lg border-2 border-yellow-200"
+            >
+              <p class="text-sm text-yellow-700 mb-1">📖 Currently Out</p>
+              <p class="text-3xl font-bold text-yellow-900">
+                {{ getActiveLoansCount() }}
+              </p>
+            </div>
+            <div
+              class="bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl p-4 shadow-lg border-2 border-green-200"
+            >
+              <p class="text-sm text-green-700 mb-1">✅ Returned</p>
+              <p class="text-3xl font-bold text-green-900">
+                {{ getReturnedLoansCount() }}
+              </p>
+            </div>
+            <div
+              class="bg-gradient-to-br from-red-100 to-rose-100 rounded-2xl p-4 shadow-lg border-2 border-red-200"
+            >
+              <p class="text-sm text-red-700 mb-1">⚠️ Overdue</p>
+              <p class="text-3xl font-bold text-red-900">
+                {{ getOverdueLoansCount() }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Book Modal -->
+  <div
+    *ngIf="showBookModal"
+    class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    (click)="closeBookModal()"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl max-w-md w-full border-2 border-purple-200"
+      (click)="$event.stopPropagation()"
+    >
+      <div
+        class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-700 to-blue-800 rounded-t-2xl"
+      >
+        <h3 class="text-xl font-bold text-white">
+          {{ editingBookId ? "✏️ Edit Book" : "➕ Add New Book" }}
+        </h3>
+        <button
+          (click)="closeBookModal()"
+          class="p-1 hover:bg-white/20 rounded-lg transition-colors"
+        >
+          <span class="text-white text-xl">✕</span>
+        </button>
+      </div>
+      <form (ngSubmit)="saveBook()" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Title *</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="bookForm.title"
+              name="title"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Author *</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="bookForm.author"
+              name="author"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >ISBN *</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="bookForm.isbn"
+              name="isbn"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Total Quantity *</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="bookForm.total_quantity"
+              name="total_quantity"
+              required
+              min="1"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Hình ảnh sách</label
+            >
+            <input
+              type="file"
+              accept="image/*"
+              (change)="onImageSelected($event)"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <div *ngIf="imagePreview" class="mt-3 relative">
+              <img
+                [src]="imagePreview"
+                alt="Preview"
+                class="w-full h-48 object-cover rounded-lg border-2 border-purple-200"
+              />
+              <button
+                type="button"
+                (click)="removeImage()"
+                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+              >
+                ✕
+              </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">
+              Chọn hình ảnh cho sách (tùy chọn)
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-3 mt-6">
+          <button
+            type="button"
+            (click)="closeBookModal()"
+            class="flex-1 px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="flex-1 px-4 py-2 bg-red-700 hover:bg-red-800 text-white font-bold rounded-xl transition-all duration-300 shadow-2xl hover:shadow-2xl hover:scale-105 border-4 border-red-600"
+          >
+            {{ editingBookId ? "💾 Save Changes" : "➕ Add Book" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Book Report Modal -->
+  <div
+    *ngIf="showBookReportModal"
+    class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    (click)="closeBookReport()"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border-2 border-purple-200"
+      (click)="$event.stopPropagation()"
+    >
+      <div
+        class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-700 to-slate-800 sticky top-0 rounded-t-2xl"
+      >
+        <h3 class="text-xl font-bold text-white">Book Management Report</h3>
+        <button
+          (click)="closeBookReport()"
+          class="p-1 hover:bg-white/20 rounded-lg transition-colors"
+        >
+          <span class="text-white text-xl">✕</span>
+        </button>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div
+            class="bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl p-4 shadow-lg border-2 border-blue-200"
+          >
+            <p class="text-sm text-blue-700 mb-1">📚 Total Books</p>
+            <p class="text-3xl font-bold text-blue-900">
+              {{ getTotalBooks() }}
+            </p>
+          </div>
+          <div
+            class="bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl p-4 shadow-lg border-2 border-green-200"
+          >
+            <p class="text-sm text-green-700 mb-1">✅ Available</p>
+            <p class="text-3xl font-bold text-green-900">
+              {{ getTotalAvailable() }}
+            </p>
+          </div>
+          <div
+            class="bg-gradient-to-br from-orange-100 to-rose-100 rounded-2xl p-4 shadow-lg border-2 border-orange-200"
+          >
+            <p class="text-sm text-orange-700 mb-1">📖 Loaned</p>
+            <p class="text-3xl font-bold text-orange-900">
+              {{ getTotalLoaned() }}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xl font-bold text-gray-900 mb-3">📚 All Books</h4>
+          <div class="border border-gray-200 rounded-lg overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-4 py-2 text-left text-gray-600">Title</th>
+                  <th class="px-4 py-2 text-left text-gray-600">Author</th>
+                  <th class="px-4 py-2 text-left text-gray-600">ISBN</th>
+                  <th class="px-4 py-2 text-center text-gray-600">
+                    Total Quantity
+                  </th>
+                  <th class="px-4 py-2 text-center text-gray-600">Available</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr *ngFor="let book of books">
+                  <td class="px-4 py-2 font-medium text-gray-900">
+                    {{ book.title }}
+                  </td>
+                  <td class="px-4 py-2 text-gray-600">{{ book.author }}</td>
+                  <td class="px-4 py-2 text-gray-600">{{ book.isbn }}</td>
+                  <td class="px-4 py-2 text-center text-gray-600">
+                    {{ book.total_quantity }}
+                  </td>
+                  <td
+                    class="px-4 py-2 text-center"
+                    [class.text-green-600]="book.available_quantity > 0"
+                    [class.text-red-600]="book.available_quantity === 0"
+                  >
+                    {{ book.available_quantity }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

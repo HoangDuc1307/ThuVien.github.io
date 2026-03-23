@@ -1,0 +1,79 @@
+<app-header></app-header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-left">
+        <h1>Khám phá tri thức — mượn sách dễ dàng</h1>
+        <p class="lead">
+          Kho sách phong phú: văn học, khoa học, giáo trình, tiểu thuyết, sách
+          thiếu nhi... Tìm sách, đặt trước và mượn nhanh chóng.
+        </p>
+
+        <form class="search-form" (ngSubmit)="onSearch()">
+          <input
+            type="text"
+            name="searchQuery"
+            placeholder="Tìm sách, tác giả hoặc thể loại..."
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          />
+          <button type="submit">Tìm kiếm</button>
+        </form>
+
+        <div class="hero-stats">
+          <div><strong>12.400+</strong><span>Sách</span></div>
+          <div><strong>1.200+</strong><span>Thành viên</span></div>
+          <div><strong>250+</strong><span>Danh mục</span></div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop&fm=jpg"
+          alt="Library"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured books -->
+  <section class="container section">
+    <div class="section-header">
+      <h2>Sách nổi bật</h2>
+      <a routerLink="/books" class="see-all">Xem tất cả →</a>
+    </div>
+
+    <div class="book-grid">
+      <article class="card" *ngFor="let book of filteredBooks">
+        <img class="card-img" [src]="book.imageSrc" [alt]="book.title" />
+        <div class="card-body">
+          <h3 class="card-title">{{ book.title }}</h3>
+          <p class="card-sub">
+            {{ book.author }} • ISBN: {{ book.isbn }}
+          </p>
+          <div class="card-meta">
+            <span>Số lượng: {{ book.available_quantity }}/{{ book.total_quantity }}</span>
+            <button class="card-btn" routerLink="/books">Xem chi tiết</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="container section">
+    <h2>Danh mục phổ biến</h2>
+    <div class="categories">
+      <a class="chip" href="#">Văn học</a>
+      <a class="chip" href="#">Khoa học</a>
+      <a class="chip" href="#">Công nghệ</a>
+      <a class="chip" href="#">Ngôn ngữ</a>
+      <a class="chip" href="#">Thiếu nhi</a>
+      <a class="chip" href="#">Lịch sử</a>
+    </div>
+  </section>
+</main>
+
+

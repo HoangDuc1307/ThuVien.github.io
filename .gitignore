@@ -1,0 +1,26 @@
+# Thư mục rác Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv_win/
+env/
+.env
+
+# Thư mục rác Node.js / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Thư mục rác của IDE (VS Code)
+.vscode/
+
+# Thư mục rác Docker
+.docker_data/
+postgres_data/
+
+# Tệp hệ thống
+.DS_Store
+Thumbs.db

@@ -1,0 +1,17 @@
+{
+  "name": "microservices-backend-runner",
+  "version": "1.0.0",
+  "description": "Script to run all microservices simultaneously.",
+  "main": "index.js",
+  "scripts": {
+    "start:users": "cd user-service && ..\\venv_win\\Scripts\\python.exe manage.py runserver 8000",
+    "start:books": "cd book-service && ..\\venv_win\\Scripts\\python.exe manage.py runserver 8001",
+    "start:gateway": "cd api-gateway && npm start",
+    "start:fe": "cd ..\\fe-library\\fe && npm start",
+    "auth": "concurrently \"npm run start:users\" \"npm run start:gateway\"",
+    "dev": "concurrently \"npm run start:users\" \"npm run start:books\" \"npm run start:gateway\" \"npm run start:fe\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
